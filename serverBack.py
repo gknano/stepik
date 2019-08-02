@@ -8,5 +8,4 @@ while True:
         data = conn.recv(1024)
         if not data or data == "close": break
         conn.send(data)
-		conn.shutdown(socket.SHUT_RDWR)
         conn.close()
