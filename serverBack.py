@@ -1,17 +1,23 @@
-#!/usr/bin/env python
- 
+#!/usr/bin/env python3
 import socket
  
-serverBack = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverBack.bind(('0.0.0.0', 2222))
-serverBack.listen(10)
+def threaded(c):
+    while True:
+        data = c.recv(1024)
+        if not data:
+            print('Bye')
+            break
+        c.send(data)
+    c.close()
+ 
+host = "0.0.0.0"
+port = 2222
+ 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind((host, port))
+s.listen(5)
 while True:
-	conn, addr = serverBack.accept()
-    data = conn.recv(1024)
-    if not data or data == "close":
-        break
-    else:
-        conn.send(data)
-        conn.shutdown(socket.SHUT_RDWR)
-        print data
-    serverBack.close()
+    sock, addr = s.accept()
+    print('Connected to :', addr[0], ':', addr[1])
+    start_new_thread(threaded, (sock,))
