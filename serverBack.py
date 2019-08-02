@@ -12,5 +12,6 @@ while True:
         break
     else:
         conn.send(data)
+        conn.shutdown(socket.SHUT_RDWR)
         print data
     serverBack.close()
