@@ -1,24 +1,12 @@
 #!/usr/bin/env python3
 import socket
-from _thread import start_new_thread
- 
-def threaded(c):
-    while True:
-        data = c.recv(1024)
-        if not data:
-            print('Bye')
-            break
-        c.send(data)
-    c.close()
- 
-host = "0.0.0.0"
-port = 2222
- 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-s.bind((host, port))
-s.listen(5)
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.bind(("0.0.0.0",2222))
+s.listen(10)
 while True:
-    sock, addr = s.accept()
-    print('Connected to :', addr[0], ':', addr[1])
-    start_new_thread(threaded, (sock,))
+        conn, addr = s.accept()
+        data = conn.recv(1024)
+        if not data or data == "close": conn.close()
+        conn.send(data)
+		conn.shutdown(socket.SHUT_RDWR)
+        conn.close()
