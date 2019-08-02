@@ -8,7 +8,7 @@ serverBack.listen(10)
 while True:
 	conn, addr = serverBack.accept()
     data = conn.recv(1024)
-    if len(data) > 1024 or data == 'close':
+    if not data or data == "close":
         break
     else:
         conn.send(data)
