@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import socket
+from _thread import start_new_thread
  
 def threaded(c):
     while True:
